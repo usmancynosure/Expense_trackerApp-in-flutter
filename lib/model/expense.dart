@@ -2,10 +2,10 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+final formatter = DateFormat.yMd();
+
 //set uuid globelly
 const uuid = Uuid();
-
-final formatter = DateFormat.yMd();
 
 //use enum to access the category
 enum Category { food, travel, work, leisure }
@@ -35,5 +35,27 @@ class Expense {
 
   String get formattedDate {
     return formatter.format(date);
+  }
+}
+
+class ExpenseBucket {
+  final List<Expense> expenses;
+  final Category category;
+  ExpenseBucket({required this.expenses, required this.category});
+
+  //user define constructor
+  ExpenseBucket.forCategory(List<Expense> allexpenses, this.category)
+      //used for to for loop the all index and reture true for certain meet
+      : expenses = allexpenses
+            .where((expense) => expense.category == category)
+            .toList();
+
+  //total expense
+  double get totalExpenses {
+    double total = 0;
+    for (var expense in expenses) {
+      total += expense.amount;
+    }
+    return total;
   }
 }
